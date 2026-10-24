@@ -1,33 +1,60 @@
 # MeUI for Filament
 
-A native application theme for Filament 5, maintained by [Saivra Technologies](https://github.com/saivra).
-MeUI gives your panel a full-height navigation rail, an inset workspace, clear light and dark surfaces,
-and a consistent treatment of tables, forms, records, actions and notices.
+A considered workspace for your Filament application. MeUI brings a full-height navigation rail, an inset
+content area and calm, consistent surfaces to the components you already use.
+
+Built for **Filament 5**. Free and open source, under the **MIT license**.
 
 [![Tests](https://github.com/saivra/meui-theme/actions/workflows/tests.yml/badge.svg)](https://github.com/saivra/meui-theme/actions/workflows/tests.yml)
-[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Packagist](https://img.shields.io/packagist/v/saivra/meui-theme)](https://packagist.org/packages/saivra/meui-theme)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/saivra/meui-theme/blob/main/LICENSE)
 
-MeUI uses Filament, Livewire and ordinary CSS. It has no JavaScript framework, external font, tracking service,
-licence server, database migration or application model of its own.
+![MeUI marketing preview in light and dark mode](https://raw.githubusercontent.com/saivra/meui-theme/main/docs/images/meui-listing.jpg)
 
-![MeUI desktop light theme](https://raw.githubusercontent.com/saivra/meui-theme/main/docs/images/desktop-light.jpg)
+Marketing artwork shows an enhanced visual direction based on the
+[official Filament demo](https://github.com/filamentphp/demo). The original application captures below
+show the current theme with the same seeded demonstration data. MeUI is an independent community theme
+by [Saivra Technologies](https://github.com/saivra).
 
-Screenshots use the standalone consumer with fictitious data:
-[dark workspace](https://raw.githubusercontent.com/saivra/meui-theme/main/docs/images/desktop-dark.jpg),
-[dark form](https://raw.githubusercontent.com/saivra/meui-theme/main/docs/images/forms-dark.jpg),
-[mobile form](https://raw.githubusercontent.com/saivra/meui-theme/main/docs/images/mobile-dark.jpg).
+## Light and dark, side by side
 
-## Requirements
+The illustrated comparisons pair the original demo with MeUI's marketing preview. The preview includes
+a richer ApexCharts-style chart composition; MeUI itself styles the host application's components and
+does not install or replace its chart library.
 
-| Dependency | Supported versions |
+![Original Filament demo and MeUI marketing preview, light mode](https://raw.githubusercontent.com/saivra/meui-theme/main/docs/images/comparison-light.jpg)
+
+![Original Filament demo and MeUI marketing preview, dark mode](https://raw.githubusercontent.com/saivra/meui-theme/main/docs/images/comparison-dark.jpg)
+
+### Current application captures
+
+These are unretouched browser captures of the same official demo dashboard, using the same data and
+1600×1000 CSS-pixel viewport. Both installations use Filament 5.10.3. The original retains the demo's
+standard layout; the themed installation enables MeUI's shell and topbar.
+
+| Original Filament demo | MeUI applied |
 | --- | --- |
-| PHP | 8.2 or later; Laravel 13 requires PHP 8.3 or later |
-| Laravel | 12 and 13 |
-| Filament | 5.10.2 or later within 5.x |
-| Browser | Current Chrome, Edge, Firefox or Safari with CSS nesting, `:has()` and `color-mix()` support |
+| ![Original Filament demo, light](https://raw.githubusercontent.com/saivra/meui-theme/main/docs/images/original-dashboard-light.jpg) | ![Current MeUI demo, light](https://raw.githubusercontent.com/saivra/meui-theme/main/docs/images/shop-dashboard-light.jpg) |
+| ![Original Filament demo, dark](https://raw.githubusercontent.com/saivra/meui-theme/main/docs/images/original-dashboard-dark.jpg) | ![Current MeUI demo, dark](https://raw.githubusercontent.com/saivra/meui-theme/main/docs/images/shop-dashboard-dark.jpg) |
 
-The test matrix covers Laravel 12 and 13, the minimum supported and current Filament versions, and SQLite and
-PostgreSQL. See [CI](https://github.com/saivra/meui-theme/actions/workflows/tests.yml) for the latest results.
+### Directory thumbnail
+
+![MeUI directory thumbnail](https://raw.githubusercontent.com/saivra/meui-theme/main/docs/images/meui-thumbnail.jpg)
+
+[Main image: 2560×1440 JPEG](https://raw.githubusercontent.com/saivra/meui-theme/main/docs/images/meui-listing.jpg)
+· [Thumbnail: 1280×720 JPEG](https://raw.githubusercontent.com/saivra/meui-theme/main/docs/images/meui-thumbnail.jpg)
+
+## A complete application surface
+
+- **One coherent workspace.** Navigation, global search, tenant switching, notifications and the profile menu.
+- **Light, dark and system appearance.** Designed surfaces for tables, charts, forms, records and dialogs.
+- **Native Filament components.** Your resources, actions, validation and authorization continue to work through Filament.
+- **Room for your brand.** Keep your panel name, logo, primary color, navigation and authentication configuration.
+- **Practical layout options.** Comfortable or compact density, optional shell, and a split authentication layout.
+- **Clear notices.** Dedicated header rails and five semantic banner tones for application messages.
+
+MeUI uses Filament, Livewire and ordinary CSS. It adds no database migrations, application models,
+tracking, external fonts or license service.
 
 ## Installation
 
@@ -36,7 +63,7 @@ composer require saivra/meui-theme
 php artisan filament:assets
 ```
 
-Register the plugin in each panel you want to theme:
+Register MeUI in your panel provider:
 
 ```php
 use Saivra\MeUi\MeUiPlugin;
@@ -44,166 +71,85 @@ use Saivra\MeUi\MeUiPlugin;
 public function panel(Panel $panel): Panel
 {
     return $panel
-        // Your panel's existing configuration...
+        // Your existing panel configuration...
         ->plugin(MeUiPlugin::make());
 }
 ```
 
-Laravel discovers the service provider automatically. MeUI augments Filament's standard theme, so a standard
-panel needs no Node build. Run `php artisan filament:assets` after package upgrades and during deployment.
-Clear cached views with `php artisan view:clear` if you see stale markup after an upgrade.
+Repeat this for each panel you want to theme. Laravel discovers the service provider automatically.
+A standard Filament panel needs no Node build. If you already use a Vite theme, keep it and follow the
+[custom-theme setup](https://github.com/saivra/meui-theme/blob/main/docs/installation.md#existing-vite-themes).
 
-To install directly from the public GitHub repository before Packagist indexing is available:
+Run `php artisan filament:assets` after package upgrades and during deployment.
 
-```shell
-composer config repositories.meui vcs https://github.com/saivra/meui-theme
-composer require saivra/meui-theme:0.1.0
-```
+## Requirements
 
-### Existing custom themes
+| Dependency | Supported versions |
+| --- | --- |
+| PHP | 8.2+ on Laravel 12; 8.3+ on Laravel 13 |
+| Laravel | 12 and 13 |
+| Filament | 5.10.2 or later within 5.x |
+| Browser | Current Chrome, Edge, Firefox or Safari with modern CSS support |
 
-Keep your Vite theme if your application or other plugins need its utility classes. Add MeUI's views to its
-Tailwind source discovery, adjusting the relative path for your CSS file:
+The [compatibility matrix](https://github.com/saivra/meui-theme/actions/workflows/tests.yml) tests
+Laravel 12 and 13, minimum and current Filament versions, and SQLite and PostgreSQL.
+See [tested scope and limitations](https://github.com/saivra/meui-theme/blob/main/docs/compatibility.md).
 
-```css
-/* resources/css/filament/admin/theme.css */
-@source '../../../../vendor/saivra/meui-theme/resources/views/**/*.blade.php';
-```
+## See the theme across the app
 
-Rebuild that theme with your normal asset command. Remove competing theme engines before enabling MeUI;
-multiple themes styling the same Filament hooks can conflict.
+| Orders in light mode | Employees in dark mode |
+| --- | --- |
+| ![Orders with MeUI](https://raw.githubusercontent.com/saivra/meui-theme/main/docs/images/orders-light.jpg) | ![Employees with MeUI](https://raw.githubusercontent.com/saivra/meui-theme/main/docs/images/employees-dark.jpg) |
 
-## Options
+The [screenshot gallery](https://github.com/saivra/meui-theme/blob/main/docs/screenshots.md) continues
+through product editing and project management. Application captures come from the official demo;
+illustrated marketing previews are labeled separately.
+
+## Configuration
 
 ```php
 MeUiPlugin::make()
-    ->density('compact')  // 'comfortable' by default
-    ->authAside(false)    // hide the split authentication aside
-    ->shell(false);      // retain your existing sidebar, topbar and widths
+    ->density('compact')
+    ->authAside(false)
+    ->shell(false);
 ```
 
-The full shell is enabled by default. It provides native navigation, tenant switching, global search,
-notifications and a profile menu with Filament's light/dark/system controls. Top-navigation panels use
-Filament's native topbar inside the notice rail. `shell(false)` keeps your panel's original shell components
-and dimensions while applying component styling.
+| Option | Default | Effect |
+| --- | --- | --- |
+| `density('comfortable' \| 'compact')` | `comfortable` | Adjust the component density. |
+| `authAside(bool)` | `true` | Show the split authentication aside on native simple pages. |
+| `shell(bool)` | `true` | Use MeUI's sidebar, topbar and widths. Disable it to retain your panel's shell. |
+| `gallery(Closure)` | Disabled | Enable the component studio for authenticated users who pass your authorization closure. |
 
-Brand names, logos, colors, menus, permissions, guards, tenancy, MFA and authentication remain configured
-by your application. MeUI does not replace them. Persist user-facing options through your application's
-own settings system. The component studio's density selector is a temporary preview.
+Branding, colors, menus, guards, tenancy, MFA and permissions are configured through your application.
+See [customization](https://github.com/saivra/meui-theme/blob/main/docs/customization.md) for examples,
+translations and CSS variables.
 
-The authentication aside also appears on native registration, recovery, verification and MFA pages. Disable
-it for a panel with a custom simple-page layout. Shell and authentication copy use namespaced translations;
-override them in `lang/vendor/meui/en/ui.php`. The included studio examples are in English.
+## Documentation
 
-## Component studio
+| Guide | What it covers |
+| --- | --- |
+| [Installation](https://github.com/saivra/meui-theme/blob/main/docs/installation.md) | Setup, existing Vite themes, deployment, upgrades and troubleshooting. |
+| [Customization](https://github.com/saivra/meui-theme/blob/main/docs/customization.md) | Branding, appearance, density, shell, translations and styling. |
+| [Components and notices](https://github.com/saivra/meui-theme/blob/main/docs/components.md) | Banner rails, Blade components and the authorized component studio. |
+| [Screenshot gallery](https://github.com/saivra/meui-theme/blob/main/docs/screenshots.md) | The official Filament demo with MeUI, across the application. |
+| [Compatibility](https://github.com/saivra/meui-theme/blob/main/docs/compatibility.md) | Supported versions, validation scope and integration limits. |
 
-The studio is off by default. Enable it only for an intended audience, with an authorization closure:
+## Contributing and support
 
-```php
-MeUiPlugin::make()->gallery(
-    fn (): bool => auth()->user()?->can('viewComponentStudio') ?? false,
-);
-```
+The package has an independent Testbench consumer. Run `composer test`, `composer analyse` and
+`php vendor/bin/pint --test` after `composer install`.
+[CONTRIBUTING.md](https://github.com/saivra/meui-theme/blob/main/CONTRIBUTING.md) covers the PostgreSQL lane
+and contribution workflow.
 
-Define that ability in your application. An authenticated user and a successful authorization check are
-required on entry and interactive actions. The page appears at your panel's `meui-studio` route. For a local
-reference screen, register it only when `app()->isLocal()`.
-
-Explore real table search, filters, sorting and empty results; form validation and reset; record details;
-dialogs; banner previews; theme and density controls. All records are fictitious. The studio does not query
-or save your application's business records, send invitations or collect sign-in credentials.
-
-## Application notices
-
-The full shell provides three notice rails:
-
-```php
-use Saivra\MeUi\MeUiRenderHook;
-
-$panel
-    ->renderHook(MeUiRenderHook::SECURITY_BANNERS, fn () => view('notices.identity'))
-    ->renderHook(MeUiRenderHook::BANNERS, fn () => view('notices.account'))
-    ->renderHook(MeUiRenderHook::BANNERS_AFTER, fn () => view('notices.announcement'));
-```
-
-Security notices appear above the utility bar. Primary and secondary notices follow below it. The shell
-measures the complete header so wrapped mobile notices leave enough room for navigation and focused content.
-Your application decides visibility, urgency, links and dismissal. With `shell(false)`, place notices through
-your existing layout and Filament hooks instead.
-
-```blade
-<x-meui::banner
-    tone="warning"
-    heading="Review your details"
-    description="Check the contact information before continuing."
->
-    <x-slot name="actions">
-        <x-filament::button tag="a" :href="$reviewUrl">Review details</x-filament::button>
-    </x-slot>
-</x-meui::banner>
-```
-
-Tones are `info`, `success`, `warning`, `danger` and `announcement`. Warning and danger use `role="alert"`;
-other tones use `status`. You can override the role. Components accept normal Blade attributes, escaped
-heading/description values, default content and optional `actions` and `controls` slots. MeUI never
-automatically dismisses a critical notice.
-
-## Layout components
-
-```blade
-<x-meui::page-intro
-    eyebrow="Workspace"
-    title="Team settings"
-    description="Keep your team's essentials up to date."
->
-    <x-slot name="actions">{{ $this->saveAction }}</x-slot>
-</x-meui::page-intro>
-
-<x-meui::frame title="People" description="Everyone with a shared view.">
-    {{ $this->table }}
-    <x-slot name="footer">{{ $memberCount }} people</x-slot>
-</x-meui::frame>
-
-<x-meui::empty-state
-    title="No results"
-    description="Try another search."
-    icon="heroicon-o-magnifying-glass"
-/>
-```
-
-## Customization and accessibility
-
-MeUI uses Filament's primary and semantic colors. Surface variables include `--meui-canvas`,
-`--meui-surface`, `--meui-subtle`, `--meui-hover`, `--meui-border`, `--meui-ink`, `--meui-muted`,
-`--meui-accent`, `--meui-radius` and `--meui-control-radius`.
-
-Styles are scoped to panels that enable MeUI. Native keyboard and modal behavior remain in Filament;
-MeUI includes visible focus treatments, semantic notice roles, reduced-motion rules, logical spacing
-and print styles. Custom brand colors, content, additional plugins and overridden layouts still need
-to be checked in your application. See [compatibility](docs/compatibility.md) for tested scope and limits.
-
-## Development
-
-```shell
-composer install
-composer test
-composer analyse
-php vendor/bin/pint --test
-```
-
-The package has its own Testbench consumer and test fixtures; no host application is needed. For the
-PostgreSQL lane, provide the `MEUI_DB_*` environment variables described in [CONTRIBUTING.md](CONTRIBUTING.md).
-The fixtures cover native repeaters, a builder, rich editor, upload field, wizard and slide-over.
-They are test resources and are excluded from Composer distribution archives.
-
-## Support and releases
-
-Report reproducible bugs through [GitHub issues](https://github.com/saivra/meui-theme/issues).
-Include your PHP, Laravel, Filament and MeUI versions, browser and the smallest reproduction you can share.
-Keep credentials and customer information out of reports. See [SECURITY.md](SECURITY.md) for private reporting.
+Open a [GitHub issue](https://github.com/saivra/meui-theme/issues) with your versions, browser and a small
+reproduction. Report vulnerabilities through the private process in
+[SECURITY.md](https://github.com/saivra/meui-theme/blob/main/SECURITY.md).
 
 MeUI is in the `0.x` series. Minor releases may change public APIs; patch releases are intended for
-compatible fixes. Check the [changelog](CHANGELOG.md) before upgrading and test your application's panels.
+compatible fixes. Review the [changelog](https://github.com/saivra/meui-theme/blob/main/CHANGELOG.md)
+and test your panels before upgrading.
 
 Created and maintained by [Ghulam Mustafa](https://github.com/GMustafa-s) at
-[Saivra Technologies](https://github.com/saivra). Released under the [MIT license](LICENSE).
+[Saivra Technologies](https://github.com/saivra). Released under the
+[MIT license](https://github.com/saivra/meui-theme/blob/main/LICENSE).
