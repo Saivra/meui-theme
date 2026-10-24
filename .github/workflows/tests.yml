@@ -1,0 +1,79 @@
+name: Tests
+
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        database: [sqlite, pgsql]
+        stack: [laravel-12-minimum, laravel-12, laravel-13]
+        include:
+          - stack: laravel-12-minimum
+            php: '8.2'
+            testbench: '^10.0'
+            filament: '5.10.2'
+          - stack: laravel-12
+            php: '8.4'
+            testbench: '^10.0'
+            filament: '^5.10.2'
+          - stack: laravel-13
+            php: '8.4'
+            testbench: '^11.0'
+            filament: '^5.10.2'
+    services:
+      postgres:
+        image: postgres:18
+        env:
+          POSTGRES_DB: meui_theme_test
+          POSTGRES_HOST_AUTH_METHOD: trust
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962 # v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: bcmath, gd, intl, mbstring, pdo_sqlite, pdo_pgsql, zip
+          coverage: none
+      - name: Resolve supported dependencies
+        run: |
+          composer require --no-update "filament/filament:${{ matrix.filament }}" --no-interaction
+          composer require --dev --no-update "orchestra/testbench:${{ matrix.testbench }}" --no-interaction
+          composer update --prefer-dist --no-interaction
+      - name: Validate package
+        run: composer validate --strict
+      - name: Test package
+        run: composer test
+        env:
+          MEUI_DB_CONNECTION: ${{ matrix.database }}
+          MEUI_DB_DATABASE: meui_theme_test
+          MEUI_DB_USERNAME: postgres
+
+  quality:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962 # v2
+        with:
+          php-version: '8.4'
+          extensions: bcmath, gd, intl, mbstring, pdo_sqlite, zip
+          coverage: none
+      - run: composer install --prefer-dist --no-interaction
+      - run: php vendor/bin/pint --test
+      - run: composer analyse
+      - run: composer audit

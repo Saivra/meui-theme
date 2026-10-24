@@ -1,0 +1,47 @@
+{
+    "name": "saivra/meui-theme",
+    "description": "A native light and dark application theme for Filament 5.",
+    "type": "library",
+    "license": "MIT",
+    "homepage": "https://github.com/saivra/meui-theme",
+    "keywords": ["filament", "filament-plugin", "laravel", "livewire", "theme", "dark-mode"],
+    "authors": [
+        {"name": "Saivra Technologies", "homepage": "https://github.com/saivra"},
+        {"name": "Ghulam Mustafa", "homepage": "https://github.com/GMustafa-s", "role": "Maintainer"}
+    ],
+    "support": {
+        "issues": "https://github.com/saivra/meui-theme/issues",
+        "source": "https://github.com/saivra/meui-theme"
+    },
+    "require": {
+        "php": "^8.2",
+        "filament/filament": "^5.10.2",
+        "illuminate/support": "^12.0 || ^13.0"
+    },
+    "require-dev": {
+        "larastan/larastan": "^3.0",
+        "laravel/pint": "^1.29",
+        "orchestra/testbench": "^10.0 || ^11.0",
+        "phpunit/phpunit": "^11.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "Saivra\\MeUi\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {"Saivra\\MeUi\\Tests\\": "tests/"}
+    },
+    "extra": {
+        "laravel": {
+            "providers": ["Saivra\\MeUi\\MeUiServiceProvider"]
+        }
+    },
+    "config": {"sort-packages": true},
+    "scripts": {
+        "post-autoload-dump": ["@php vendor/bin/testbench package:discover --ansi"],
+        "test": "@php vendor/bin/phpunit",
+        "format": "@php vendor/bin/pint",
+        "analyse": "@php vendor/bin/phpstan analyse --memory-limit=1G"
+    }
+}
