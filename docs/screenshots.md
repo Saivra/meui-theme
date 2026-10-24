@@ -15,6 +15,13 @@ is not bundled with MeUI.
 
 ![Dark mode illustrated comparison](https://raw.githubusercontent.com/saivra/meui-theme/main/docs/images/comparison-dark.jpg)
 
+### Orders in light mode
+
+A refined marketing preview of the demo's order-management screen, with readable navigation,
+statistics, status tabs and a balanced landscape table.
+
+![MeUI orders marketing preview in light mode](https://raw.githubusercontent.com/saivra/meui-theme/main/docs/images/orders-light-preview.jpg)
+
 ## Current application
 
 The following images are unretouched captures of a local copy of the
@@ -29,12 +36,6 @@ All people, addresses, orders and financial figures are demonstration data.
 | --- | --- |
 | ![Original light dashboard](https://raw.githubusercontent.com/saivra/meui-theme/main/docs/images/original-dashboard-light.jpg) | ![MeUI light dashboard](https://raw.githubusercontent.com/saivra/meui-theme/main/docs/images/shop-dashboard-light.jpg) |
 | ![Original dark dashboard](https://raw.githubusercontent.com/saivra/meui-theme/main/docs/images/original-dashboard-dark.jpg) | ![MeUI dark dashboard](https://raw.githubusercontent.com/saivra/meui-theme/main/docs/images/shop-dashboard-dark.jpg) |
-
-### Orders
-
-Resource statistics, status tabs, searchable records, semantic badges, column summaries and pagination.
-
-![Orders in MeUI light mode](https://raw.githubusercontent.com/saivra/meui-theme/main/docs/images/orders-light.jpg)
 
 ### Product editing
 

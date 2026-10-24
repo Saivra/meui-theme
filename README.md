@@ -97,9 +97,9 @@ See [tested scope and limitations](https://github.com/saivra/meui-theme/blob/mai
 
 ## See the theme across the app
 
-| Orders in light mode | Employees in dark mode |
+| Orders — light marketing preview | Employees — dark application capture |
 | --- | --- |
-| ![Orders with MeUI](https://raw.githubusercontent.com/saivra/meui-theme/main/docs/images/orders-light.jpg) | ![Employees with MeUI](https://raw.githubusercontent.com/saivra/meui-theme/main/docs/images/employees-dark.jpg) |
+| ![MeUI orders marketing preview in light mode](https://raw.githubusercontent.com/saivra/meui-theme/main/docs/images/orders-light-preview.jpg) | ![Employees with MeUI](https://raw.githubusercontent.com/saivra/meui-theme/main/docs/images/employees-dark.jpg) |
 
 The [screenshot gallery](https://github.com/saivra/meui-theme/blob/main/docs/screenshots.md) continues
 through product editing and project management. Application captures come from the official demo;
