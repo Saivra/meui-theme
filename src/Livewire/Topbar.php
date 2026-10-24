@@ -8,6 +8,7 @@ use Illuminate\Contracts\View\View;
 use Livewire\Attributes\Locked;
 use Livewire\Attributes\On;
 use Saivra\MeUi\MeUiPlugin;
+use Saivra\MeUi\Pages\ThemeSettings;
 
 class Topbar extends \Filament\Livewire\Topbar
 {
@@ -42,6 +43,10 @@ class Topbar extends \Filament\Livewire\Topbar
 
     public function contextLabel(): string|Htmlable
     {
+        if (request()->routeIs(ThemeSettings::getRouteName())) {
+            return __('meui::ui.customizer.title');
+        }
+
         foreach (Filament::getNavigation() as $group) {
             foreach ($group->getItems() as $item) {
                 foreach ($item->getChildItems() as $child) {

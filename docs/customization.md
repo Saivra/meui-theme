@@ -1,90 +1,163 @@
 # Customization
 
-[Back to the README](../README.md) · [Installation](installation.md) · [Components and notices](components.md)
+[Back to the README](../README.md) · [Installation](installation.md) · [Components](components.md)
 
-MeUI follows the configuration of the panel that enables it. Start with Filament's native panel APIs
-for your application's identity and behavior.
+MeUI offers panel defaults for developers and an optional personal appearance page for signed-in users.
+Branding, navigation, guards and application permissions remain configured through Filament.
 
-## Branding
+## Developer defaults
+
+```php
+use Saivra\MeUi\MeUiPlugin;
+
+MeUiPlugin::make()
+    ->palette('slate')
+    ->accent('panel')
+    ->radius('rounded')
+    ->surface('elevated')
+    ->sidebarStyle('soft')
+    ->workspace('inset')
+    ->density('comfortable')
+    ->contrast('standard');
+```
+
+| Method | Choices | Default |
+| --- | --- | --- |
+| `palette()` | `slate`, `zinc`, `stone` | `slate` |
+| `accent()` | `panel`, `blue`, `indigo`, `violet`, `teal`, `rose` | `panel` |
+| `radius()` | `compact`, `rounded`, `soft` | `rounded` |
+| `surface()` | `elevated`, `outlined` | `elevated` |
+| `sidebarStyle()` | `soft`, `solid` | `soft` |
+| `workspace()` | `inset`, `flush` | `inset` |
+| `density()` | `comfortable`, `compact` | `comfortable` |
+| `contrast()` | `standard`, `strong` | `standard` |
+
+Every method also accepts a closure, evaluated against the current request. This lets your application
+resolve defaults from its database settings. Return a supported value; invalid defaults throw an
+`InvalidArgumentException`. Free-form CSS is not accepted as a saved appearance preference.
+
+`accent('panel')` follows the primary color configured by the application. An accent preset changes the
+primary palette throughout the themed panel; semantic success, warning and danger colors retain their meaning.
+
+## Personal customization for signed-in users
+
+The customizer is **off by default**. To use its database-backed storage, publish the optional migration
+and run it before enabling the page:
+
+```shell
+php artisan vendor:publish --tag=meui-migrations
+php artisan migrate
+php artisan filament:assets
+```
+
+Then enable it in the panel provider:
+
+```php
+MeUiPlugin::make()->customizer();
+```
+
+Every signed-in user of that panel can open **Customize theme** from their profile menu. The live preview
+updates while they choose options. **Save preferences** applies the appearance and stores it in the database;
+**Reset to defaults** clears their saved choices and restores the provider's current defaults.
+
+Preferences are isolated by panel, authentication guard, user model class and authenticated identifier.
+They follow the same user across tenants within that panel. They do not change another user's appearance
+or the application's shared branding. Owner identifiers are derived on the server, never accepted from the form.
+
+The table stores a scope hash, the validated preference values and timestamps. When customization is disabled,
+MeUI does not read or write this table. The theme and studio work without the optional migration.
+
+### Restrict access
+
+```php
+MeUiPlugin::make()->customizer(
+    authorize: fn (): bool => auth()->user()?->can('customizeTheme') ?? false,
+);
+```
+
+Define that ability in your application. Authentication and the authorization callback are checked again
+when the user saves or resets. Use `customizer(false)` to disable the page entirely.
+
+### Choose the available controls
+
+```php
+MeUiPlugin::make()
+    ->accent('panel')
+    ->customizer()
+    ->customizerOptions(['density', 'palette', 'radius', 'contrast']);
+```
+
+The full option keys are `density`, `palette`, `accent`, `radius`, `surface`, `sidebar`, `workspace` and
+`contrast`. Only the selected controls appear. Values outside the allowlist are rejected on save, and old
+saved choices for controls you remove no longer override your defaults. This lets you keep the application's
+accent and layout fixed while allowing personal density, neutral colors and corners.
+
+### Use an existing database settings system
+
+Provide both callbacks to use your application's store instead of MeUI's optional table:
+
+```php
+use Filament\Facades\Filament;
+
+MeUiPlugin::make()
+    ->customizer()
+    ->preferences(
+        load: fn (): array => Filament::auth()->user()->appearance_preferences ?? [],
+        save: fn (array $values) => Filament::auth()->user()->update([
+            'appearance_preferences' => $values,
+        ]),
+    );
+```
+
+This example assumes an `appearance_preferences` JSON column with an `array` cast and appropriate model
+assignment rules. You can call your own settings service instead. Scope the callbacks to the authenticated
+user and current panel. Saving receives validated option values; resetting receives an empty array.
+The optional MeUI migration is not needed with these callbacks.
+
+## Branding and native layout
 
 ```php
 use Filament\Support\Colors\Color;
-use Saivra\MeUi\MeUiPlugin;
 
 return $panel
     ->brandName('Acme')
     ->brandLogo(asset('images/acme-logo.svg'))
     ->darkModeBrandLogo(asset('images/acme-logo-light.svg'))
     ->colors(['primary' => Color::Teal])
-    ->plugin(MeUiPlugin::make());
+    ->plugin(MeUiPlugin::make())
+    ->sidebarWidth('18rem');
 ```
 
-Your panel continues to own its name, logos, colors, navigation groups, menus, guards, permissions,
-tenancy and authentication. MeUI's full shell presents the native navigation, tenant menu, global search,
-notifications and user actions.
+Use Filament's native APIs for fonts, logos, navigation and content width. Set a custom sidebar width after
+registering the plugin to override MeUI's defaults of `17.5rem` expanded and `5rem` collapsed.
 
-## Appearance and density
+Light, dark and system mode use Filament's native appearance controls and browser preference. MeUI's
+database preferences cover its eight customization options.
 
-Light, dark and system appearance use Filament's native preference controls in the profile menu.
-Your application's existing dark-mode configuration still applies.
+## Keep an existing shell or authentication layout
 
 ```php
-MeUiPlugin::make()->density('compact');
+MeUiPlugin::make()
+    ->shell(false)
+    ->authAside(false);
 ```
 
-`comfortable` is the default. Invalid density values throw an `InvalidArgumentException`.
-Store any persistent user-facing density preference through your application's settings system.
-The component studio's selector is a temporary preview.
+`shell(false)` preserves your sidebar and topbar components and dimensions while keeping component styling.
+Top-navigation panels use Filament's native topbar within the notice rail. The split authentication aside
+normally accompanies native sign-in, registration, recovery, verification and MFA pages; disable it if your
+application already provides its own layout. Authentication and access rules remain native.
 
-## Keep an existing shell
+## Translations and CSS variables
 
-```php
-MeUiPlugin::make()->shell(false);
-```
+Override strings in `lang/vendor/meui/en/ui.php`, using
+[`resources/lang/en/ui.php`](../resources/lang/en/ui.php) as the key reference. Add the corresponding locale
+directory for another language. The included studio examples are English.
 
-This preserves your panel's sidebar and topbar components and dimensions while retaining MeUI's
-component styling. With the full shell enabled, MeUI sets the sidebar to `17.5rem` and the collapsed
-sidebar to `5rem`. Top-navigation panels use Filament's native topbar within the notice rail.
+Surface variables include `--meui-canvas`, `--meui-surface`, `--meui-subtle`, `--meui-hover`, `--meui-border`,
+`--meui-control-border`, `--meui-ink`, `--meui-muted`, `--meui-accent`, `--meui-radius`,
+`--meui-workspace-radius`, `--meui-control-radius` and `--meui-shadow`.
 
-## Authentication layout
-
-The split aside is enabled on native sign-in, registration, recovery, verification and MFA simple pages.
-Disable it when your panel already provides a custom authentication layout:
-
-```php
-MeUiPlugin::make()->authAside(false);
-```
-
-MeUI does not change authentication validation or account access rules.
-
-## Translations
-
-Shell and authentication copy use namespaced translations. Override the included English strings in
-your application at `lang/vendor/meui/en/ui.php`, using the package's
-[`resources/lang/en/ui.php`](../resources/lang/en/ui.php) as the key reference.
-Add the corresponding locale directory for another language. The optional studio's sample content is English.
-
-## CSS variables
-
-The stylesheet exposes these surface variables:
-
-| Variable | Purpose |
-| --- | --- |
-| `--meui-canvas` | Outer workspace background. |
-| `--meui-surface` | Main component surfaces. |
-| `--meui-subtle` | Secondary surface emphasis. |
-| `--meui-hover` | Hover background. |
-| `--meui-border` | Surface and component borders. |
-| `--meui-ink` | Primary text. |
-| `--meui-muted` | Secondary text. |
-| `--meui-accent` | Accent treatment derived from the panel's primary color. |
-| `--meui-radius` | Surface corner radius. |
-| `--meui-control-radius` | Control corner radius. |
-
-Inspect the included stylesheet before overriding variables. Scope overrides to your themed panel and
-check both appearances, focused controls, validation messages and disabled states. Brand colors and
-additional plugins can affect contrast, so validate the finished application.
-
-MeUI includes visible focus treatments, semantic notice roles, logical spacing, reduced-motion rules
-and print styles. Native keyboard and modal behavior remain in Filament. See
-[compatibility](compatibility.md) for the boundaries of the tested integration.
+Inspect the included stylesheets before overriding them. Scope overrides to your themed panel and check
+both appearances, focused controls, validation and disabled states. MeUI includes focus treatments, semantic
+notice roles, mobile touch targets, reduced-motion and forced-colors rules. Validate the finished application
+with its brand colors and additional plugins; see [compatibility](compatibility.md).

@@ -61,7 +61,8 @@ php artisan filament:assets
 php artisan view:clear
 ```
 
-Run your existing application cache and Vite build steps as usual. MeUI has no migrations or setup command.
+Run your existing application cache and Vite build steps as usual. The theme needs no migration.
+The optional personal customizer has its own [setup steps](customization.md#personal-customization-for-signed-in-users).
 
 To upgrade within the constraint selected by your application:
 
@@ -85,6 +86,7 @@ In the `0.x` series, a minor release may change public APIs.
 | A custom authentication page has two side panels | Use `authAside(false)` for that panel. |
 | An existing shell must retain its dimensions | Use `shell(false)` to keep your own sidebar, topbar and width settings. |
 | Composer cannot select a version | Confirm the PHP, Laravel and Filament requirements, including other plugins that pin Filament versions. |
+| The customizer reports a missing preferences table | Publish and run the optional `meui-migrations` migration, or configure both persistence callbacks before enabling `customizer()`. |
 
 For a reproducible issue, include your PHP, Laravel, Filament and MeUI versions, browser and the smallest
 example you can share. Use the [issue tracker](https://github.com/saivra/meui-theme/issues).

@@ -82,8 +82,10 @@ class PluginTest extends TestCase
     {
         $this->artisan('filament:assets')->assertSuccessful();
 
-        $asset = public_path('css/saivra/meui-theme/theme.css');
-        self::assertFileExists($asset);
-        self::assertSame(hash_file('sha256', __DIR__.'/../resources/css/theme.css'), hash_file('sha256', $asset));
+        foreach (['theme', 'customization'] as $name) {
+            $asset = public_path('css/saivra/meui-theme/'.$name.'.css');
+            self::assertFileExists($asset);
+            self::assertSame(hash_file('sha256', __DIR__.'/../resources/css/'.$name.'.css'), hash_file('sha256', $asset));
+        }
     }
 }
