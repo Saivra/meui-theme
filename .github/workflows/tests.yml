@@ -50,13 +50,13 @@ jobs:
           php-version: ${{ matrix.php }}
           extensions: bcmath, gd, intl, mbstring, pdo_sqlite, pdo_pgsql, zip
           coverage: none
+      - name: Validate package manifest
+        run: composer validate --strict
       - name: Resolve supported dependencies
         run: |
           composer require --no-update "filament/filament:${{ matrix.filament }}" --no-interaction
           composer require --dev --no-update "orchestra/testbench:${{ matrix.testbench }}" --no-interaction
           composer update --prefer-dist --no-interaction
-      - name: Validate package
-        run: composer validate --strict
       - name: Test package
         run: composer test
         env:
