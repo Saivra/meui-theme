@@ -7,7 +7,7 @@ an inset content area and personal appearance controls. Free and open source und
 [![Packagist](https://img.shields.io/packagist/v/saivra/meui-theme)](https://packagist.org/packages/saivra/meui-theme)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/saivra/meui-theme/blob/main/LICENSE)
 
-![MeUI light and dark marketing preview](https://raw.githubusercontent.com/saivra/meui-theme/main/docs/images/meui-listing.jpg)
+<img class="filament-hidden" src="https://raw.githubusercontent.com/saivra/meui-theme/main/docs/images/meui-listing.jpg" alt="MeUI light and dark marketing preview" />
 
 The hero is an illustrated marketing preview. The authentication, studio and customizer screens below
 are real captures of the working plugin. MeUI is an independent community theme by
@@ -199,7 +199,7 @@ composition. The theme uses the application's chart components and does not inst
 
 ![Orders marketing preview](https://raw.githubusercontent.com/saivra/meui-theme/main/docs/images/orders-light-preview.jpg)
 
-![Directory thumbnail](https://raw.githubusercontent.com/saivra/meui-theme/main/docs/images/meui-thumbnail.jpg)
+<img class="filament-hidden" src="https://raw.githubusercontent.com/saivra/meui-theme/main/docs/images/meui-thumbnail.jpg" alt="Directory thumbnail" />
 
 [Main image: 2560×1440 JPEG](https://raw.githubusercontent.com/saivra/meui-theme/main/docs/images/meui-listing.jpg)
 · [Thumbnail: 1280×720 JPEG](https://raw.githubusercontent.com/saivra/meui-theme/main/docs/images/meui-thumbnail.jpg)
